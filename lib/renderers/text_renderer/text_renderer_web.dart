@@ -77,6 +77,7 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
     div.style.width = '${(key.globalPaintBounds?.width ?? 100) + 1}px';
     div.text = _getTextFromWidget().toString();
     div.style.color = '#ff0000';
+    div.style.pointerEvents = 'none';
   }
 
   @override
