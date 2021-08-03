@@ -120,11 +120,17 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
         return data;
       }
     }
+
     if (widget.text is RichText) {
       return (widget.text as RichText).text.toPlainText();
     }
 
+    if (widget.text is SelectableText) {
+      final st = widget.text as SelectableText;
+      return st.data ?? st.textSpan?.toPlainText() ?? '';
+    }
+
     throw FlutterError(
-        'Provided Widget is of Type ${widget.text.runtimeType}. Only supported widget is Text & RichText.');
+        'Provided Widget is of Type ${widget.text.runtimeType}. Only supported widget is Text, RichText and SelectableText');
   }
 }
