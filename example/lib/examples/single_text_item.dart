@@ -28,6 +28,9 @@ class SingleTextItem extends StatelessWidget {
                 ),
               ),
             ),
+            TextRenderer(
+              text: SelectableText('Selectable Hello World'),
+            ),
           ],
         ),
       ),
