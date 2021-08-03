@@ -5,8 +5,9 @@ import 'package:seo_renderer_example/examples/scrollable_content.dart';
 import 'package:seo_renderer_example/examples/single_text_item.dart';
 
 void main() {
+  SeoRenderer.show = true;
   runApp(MaterialApp(
-    navigatorObservers: [routeObserver],
+    navigatorObservers: [SeoRenderer.routeObserver],
     home: MyApp(),
   ));
 }

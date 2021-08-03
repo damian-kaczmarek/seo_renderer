@@ -28,14 +28,14 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
 
   @override
   void didChangeDependencies() {
-    routeObserver.subscribe(this, ModalRoute.of(context)!);
+    SeoRenderer.routeObserver.subscribe(this, ModalRoute.of(context)!);
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     clear();
-    routeObserver.unsubscribe(this);
+    SeoRenderer.routeObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -74,7 +74,7 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
     div.style.position = 'absolute';
     div.style.top = '${key.globalPaintBounds?.top ?? 0}px';
     div.style.left = '${key.globalPaintBounds?.left ?? 0}px';
-    div.style.width = '${key.globalPaintBounds?.width ?? 100}px';
+    div.style.width = '${(key.globalPaintBounds?.width ?? 100) + 1}px';
     div.text = _getTextFromWidget().toString();
     div.style.color = '#ff0000';
   }
@@ -90,7 +90,9 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
 
   addDivElement() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (!regExpBots.hasMatch(window.navigator.userAgent.toString())) {
+      if (!SeoRenderer.show &&
+          !SeoRenderer.regExpBots
+              .hasMatch(window.navigator.userAgent.toString())) {
         return;
       }
       refresh();
