@@ -12,6 +12,8 @@ class SeoRenderer {
 
   ///use to force adding html divs for developing purposes
   static bool show = false;
+
+  SeoRenderer._();
 }
 
 /// A [GlobalKey] Extension to get Rect from the RenderObject from a GlobalKey
