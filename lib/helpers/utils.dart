@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 
-/// [RouteObserver] created to remove Element in case pop in [RouteAware]
-final RouteObserver<ModalRoute<void>> routeObserver =
-    RouteObserver<ModalRoute<void>>();
 
-///Regex to detect Crawler for Search Engines
-RegExp regExpBots = RegExp(r'/bot|google|baidu|bing|msn|teoma|slurp|yandex/i');
+
+class SeoRenderer {
+  /// [RouteObserver] created to remove Element in case pop in [RouteAware]
+  static final RouteObserver<ModalRoute<void>> routeObserver =
+  RouteObserver<ModalRoute<void>>();
+
+  ///Regex to detect Crawler for Search Engines
+  static final RegExp regExpBots = RegExp(r'/bot|google|baidu|bing|msn|teoma|slurp|yandex/i');
+
+  ///use to force adding html divs for developing purposes
+  static bool show = false;
+
+  SeoRenderer._();
+}
 
 /// A [GlobalKey] Extension to get Rect from the RenderObject from a GlobalKey
 extension GlobalKeyExtension on GlobalKey {
