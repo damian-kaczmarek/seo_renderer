@@ -9,10 +9,26 @@ class SingleTextItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: TextRenderer(
-          text: Text(
-              '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-              '''),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextRenderer(
+              text: Text('Hello World'),
+            ),
+            TextRenderer(
+              text: RichText(
+                text: TextSpan(
+                  text: 'Hello ',
+                  children: const <TextSpan>[
+                    TextSpan(
+                        text: 'bold',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: ' world!'),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
