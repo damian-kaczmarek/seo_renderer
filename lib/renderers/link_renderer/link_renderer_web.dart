@@ -93,16 +93,17 @@ class _LinkRendererState extends State<LinkRenderer> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        key: key,
-        builder: (_, __) {
-          return widget.child;
-        });
+    return SizedBox(
+      key: key,
+      child: widget.child,
+    );
   }
 
   addDivElement() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (!SeoRenderer.show && !SeoRenderer.regExpBots.hasMatch(window.navigator.userAgent.toString())) {
+      if (!SeoRenderer.show &&
+          !SeoRenderer.regExpBots
+              .hasMatch(window.navigator.userAgent.toString())) {
         return;
       }
       refresh();
