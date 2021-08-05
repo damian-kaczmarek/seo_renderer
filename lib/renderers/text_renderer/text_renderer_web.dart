@@ -82,11 +82,10 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        key: key,
-        builder: (_, __) {
-          return widget.text;
-        });
+    return SizedBox(
+      key: key,
+      child: widget.text,
+    );
   }
 
   addDivElement() {
