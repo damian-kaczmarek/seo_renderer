@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:seo_renderer/helpers/seo_object.dart';
 import 'package:seo_renderer/seo_renderer.dart';
 
 class SingleTextItem extends StatelessWidget {
@@ -31,9 +32,28 @@ class SingleTextItem extends StatelessWidget {
             TextRenderer(
               text: SelectableText('Selectable Hello World'),
             ),
+            TextRenderer(
+              text: CustomClass('Hello world from custom class'),
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class CustomClass extends StatelessWidget implements SeoTextObject {
+  final String myHello;
+
+  CustomClass(this.myHello);
+
+  @override
+  String getSeoText() {
+    return myHello;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(myHello);
   }
 }
