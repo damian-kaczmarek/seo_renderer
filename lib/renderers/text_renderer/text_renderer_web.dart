@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:seo_renderer/helpers/seo_object.dart';
 import 'package:seo_renderer/helpers/utils.dart';
 
 /// A Widget to create the HTML Tags from the TEXT widget.
@@ -74,7 +75,7 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
     div.style.position = 'absolute';
     div.style.top = '${key.globalPaintBounds?.top ?? 0}px';
     div.style.left = '${key.globalPaintBounds?.left ?? 0}px';
-    div.style.width = '${(key.globalPaintBounds?.width ?? 100) + 1}px';
+    div.style.width = '${key.globalPaintBounds?.width ?? 100}px';
     div.text = _getTextFromWidget().toString();
     div.style.color = '#ff0000';
     div.style.pointerEvents = 'none';
@@ -106,31 +107,34 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
   }
 
   String? _getTextFromWidget() {
-    if (widget.text is Text) {
-      Text wid = (widget.text as Text);
+    final text = widget.text;
+    if (text is Text) {
       String? data;
-      data = wid.data;
+      data = text.data;
       if (data != null) {
         return data;
       }
-      if (wid.textSpan != null) {
-        data = wid.textSpan!.toPlainText();
+      if (text.textSpan != null) {
+        data = text.textSpan!.toPlainText();
       }
       if (data != null) {
         return data;
       }
     }
 
-    if (widget.text is RichText) {
-      return (widget.text as RichText).text.toPlainText();
+    if (text is RichText) {
+      return text.text.toPlainText();
     }
 
-    if (widget.text is SelectableText) {
-      final st = widget.text as SelectableText;
-      return st.data ?? st.textSpan?.toPlainText() ?? '';
+    if (text is SelectableText) {
+      return text.data ?? text.textSpan?.toPlainText() ?? '';
+    }
+
+    if(text is SeoTextObject){
+      return (text as SeoTextObject).getSeoText();
     }
 
     throw FlutterError(
-        'Provided Widget is of Type ${widget.text.runtimeType}. Only supported widget is Text, RichText and SelectableText');
+        'Provided Widget is of Type ${text.runtimeType}. Only supported widget is Text, RichText, SelectableText and classes that implement SeoObject');
   }
 }

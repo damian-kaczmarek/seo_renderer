@@ -1,0 +1,4 @@
+
+mixin SeoTextObject {
+  String getSeoText();
+}
