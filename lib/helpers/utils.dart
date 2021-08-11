@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-
-
 class SeoRenderer {
   /// [RouteObserver] created to remove Element in case pop in [RouteAware]
   static final RouteObserver<ModalRoute<void>> routeObserver =
-  RouteObserver<ModalRoute<void>>();
+      RouteObserver<ModalRoute<void>>();
 
   ///Regex to detect Crawler for Search Engines
-  static final RegExp regExpBots = RegExp(r'/bot|google|baidu|bing|msn|teoma|slurp|yandex/i');
+  static final RegExp regExpBots =
+      RegExp(r'/bot|google|baidu|bing|msn|teoma|slurp|yandex/i');
 
   ///use to force adding html divs for developing purposes
   static bool show = false;
@@ -33,6 +32,40 @@ extension GlobalKeyExtension on GlobalKey {
 ///Controller class to refresh the position in case of Scrolling
 ///[refresh] method to reposition the html tags in case widget is displaced somewhere.
 class RenderController {
-  late VoidCallback refresh;
-  late VoidCallback clear;
+  VoidCallback get refresh {
+    if(_lateRefreshWrapper != null){
+      return _lateRefreshWrapper!;
+    }
+    if (rendererRefresh != null) {
+      return rendererRefresh!;
+    }
+
+    if (_lateRefreshWrapper == null) {
+      _lateRefreshWrapper = () {
+        rendererRefresh?.call();
+      };
+    }
+    return _lateRefreshWrapper!;
+  }
+  VoidCallback get clear {
+    if(_lateClearWrapper != null){
+      return _lateClearWrapper!;
+    }
+    if (rendererClear != null) {
+      return rendererClear!;
+    }
+
+    if (_lateClearWrapper == null) {
+      _lateClearWrapper = () {
+        rendererClear?.call();
+      };
+    }
+    return _lateClearWrapper!;
+  }
+
+  VoidCallback? _lateRefreshWrapper;
+  VoidCallback? _lateClearWrapper;
+
+  VoidCallback? rendererRefresh;
+  VoidCallback? rendererClear;
 }
