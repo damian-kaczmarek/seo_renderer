@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:seo_renderer/helpers/utils_platform.dart';
 
 class SeoRenderer {
   /// [RouteObserver] created to remove Element in case pop in [RouteAware]
   static final RouteObserver<ModalRoute<void>> routeObserver =
       RouteObserver<ModalRoute<void>>();
+  static final _platformUtils = SeoRendererPlatform();
 
   ///Regex to detect Crawler for Search Engines
   static final RegExp regExpBots =
       RegExp(r'/bot|google|baidu|bing|msn|teoma|slurp|yandex/i');
 
-  ///use to force adding html divs for developing purposes
+  /// Use to force adding html divs for developing purposes
   static bool show = false;
+
+  /// Is browser user agent recognized as search engine crawler
+  static bool isBot() {
+    return _platformUtils.isBot();
+  }
+
+  /// Is seo renders shown to user.
+  /// Takes under consideration if browser user agent is bot and variable [SeoRenderer.show].
+  static bool isShowingSeoRenders() {
+    return SeoRenderer.show || _platformUtils.isBot();
+  }
 
   SeoRenderer._();
 }
@@ -33,7 +46,7 @@ extension GlobalKeyExtension on GlobalKey {
 ///[refresh] method to reposition the html tags in case widget is displaced somewhere.
 class RenderController {
   VoidCallback get refresh {
-    if(_lateRefreshWrapper != null){
+    if (_lateRefreshWrapper != null) {
       return _lateRefreshWrapper!;
     }
     if (rendererRefresh != null) {
@@ -47,8 +60,9 @@ class RenderController {
     }
     return _lateRefreshWrapper!;
   }
+
   VoidCallback get clear {
-    if(_lateClearWrapper != null){
+    if (_lateClearWrapper != null) {
       return _lateClearWrapper!;
     }
     if (rendererClear != null) {
