@@ -29,14 +29,18 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
 
   @override
   void didChangeDependencies() {
-    SeoRenderer.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    if (SeoRenderer.isShowingSeoRenders()) {
+      SeoRenderer.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    }
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    clear();
-    SeoRenderer.routeObserver.unsubscribe(this);
+    if (SeoRenderer.isShowingSeoRenders()) {
+      clear();
+      SeoRenderer.routeObserver.unsubscribe(this);
+    }
     super.dispose();
   }
 
@@ -72,6 +76,9 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
   }
 
   void refresh() {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return;
+    }
     div.style.position = 'absolute';
     div.style.top = '${key.globalPaintBounds?.top ?? 0}px';
     div.style.left = '${key.globalPaintBounds?.left ?? 0}px';
@@ -83,6 +90,9 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return widget.text;
+    }
     return SizedBox(
       key: key,
       child: widget.text,
@@ -90,18 +100,19 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
   }
 
   addDivElement() {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return;
+    }
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (!SeoRenderer.show &&
-          !SeoRenderer.regExpBots
-              .hasMatch(window.navigator.userAgent.toString())) {
-        return;
-      }
       refresh();
       if (!document.body!.contains(div)) document.body?.append(div);
     });
   }
 
   void clear() {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return;
+    }
     div.remove();
   }
 
@@ -129,7 +140,7 @@ class _TextRendererState extends State<TextRenderer> with RouteAware {
       return text.data ?? text.textSpan?.toPlainText() ?? '';
     }
 
-    if(text is SeoTextObject){
+    if (text is SeoTextObject) {
       return (text as SeoTextObject).getSeoText();
     }
 

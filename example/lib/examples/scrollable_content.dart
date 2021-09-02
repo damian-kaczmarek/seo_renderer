@@ -19,6 +19,9 @@ class _ScrollableContentState extends State<ScrollableContent> {
   @override
   void initState() {
     super.initState();
+    if(!SeoRenderer.isShowingSeoRenders()){
+      return;
+    }
     for (int i = 0; i < loremIpsumCount; i++) {
       final rc = RenderController();
       renderControllers.add(rc);

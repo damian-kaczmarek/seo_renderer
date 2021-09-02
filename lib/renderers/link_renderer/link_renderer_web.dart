@@ -36,14 +36,18 @@ class _LinkRendererState extends State<LinkRenderer> with RouteAware {
 
   @override
   void didChangeDependencies() {
-    SeoRenderer.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    if (SeoRenderer.isShowingSeoRenders()) {
+      SeoRenderer.routeObserver.subscribe(this, ModalRoute.of(context)!);
+    }
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    clear();
-    SeoRenderer.routeObserver.unsubscribe(this);
+    if (SeoRenderer.isShowingSeoRenders()) {
+      clear();
+      SeoRenderer.routeObserver.unsubscribe(this);
+    }
     super.dispose();
   }
 
@@ -79,6 +83,9 @@ class _LinkRendererState extends State<LinkRenderer> with RouteAware {
   }
 
   void refresh() {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return;
+    }
     div.style.position = 'absolute';
     div.style.top = '${key.globalPaintBounds?.top ?? 0}px';
     div.style.left = '${key.globalPaintBounds?.left ?? 0}px';
@@ -93,6 +100,9 @@ class _LinkRendererState extends State<LinkRenderer> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return widget.child;
+    }
     return SizedBox(
       key: key,
       child: widget.child,
@@ -100,18 +110,19 @@ class _LinkRendererState extends State<LinkRenderer> with RouteAware {
   }
 
   addDivElement() {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return;
+    }
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (!SeoRenderer.show &&
-          !SeoRenderer.regExpBots
-              .hasMatch(window.navigator.userAgent.toString())) {
-        return;
-      }
       refresh();
       if (!document.body!.contains(div)) document.body?.append(div);
     });
   }
 
   void clear() {
+    if (!SeoRenderer.isShowingSeoRenders()) {
+      return;
+    }
     div.remove();
   }
 }
